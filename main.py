@@ -28,12 +28,15 @@ async def cock_command_handler(message: types.Message):
     user_id = message.from_user.id
     chat = f"chat{message.chat.id}"
 
-    cur.execute(f"""CREATE TABLE if NOT EXISTS "{chat}" (
+    cur.execute(f"""
+        CREATE TABLE if NOT EXISTS "{chat}" (
             id          BIGINT          NOT NULL PRIMARY KEY,
+            name        text,
             size        NUMERIC(20, 1),
             history     jsonb,
             last_use    TIMESTAMP(0)    DEFAULT now()
-        )""")
+        )
+    """)
 
     size = round(uniform(-5, 10), 1)
 
