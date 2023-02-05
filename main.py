@@ -6,27 +6,28 @@ from datetime import datetime
 from aiogram import Bot, Dispatcher, executor, types, utils
 
 conn = psycopg.connect(f"""
-        host={environ.get("DB_HOST")}
-        port={environ.get("DB_PORT")}
-        dbname={environ.get("DB_NAME")}
-        user={environ.get("DB_USER")}
-        password={environ.get("DB_PASSWORD")}
-    """)
+    host = {environ.get("DB_HOST")}
+    port = {environ.get("DB_PORT")}
+    dbname = {environ.get("DB_NAME")}
+    user = {environ.get("DB_USER")}
+    password = {environ.get("DB_PASSWORD")}
+""")
 
 conn.autocommit = True
 
 cur = conn.cursor()
 
-bot = Bot(token = environ.get("BOT_API_TOKEN"))
+bot = Bot(token = environ.get("BOT_API_TOKEN"), parse_mode = "markdown")
 dp = Dispatcher(bot)
 
 @dp.message_handler(
     commands=["cock"], 
     chat_type = [types.ChatType.GROUP, types.ChatType.SUPERGROUP]
-    )
+)
 async def cock_command_handler(message: types.Message):
     user_id = message.from_user.id
     chat = f"chat{message.chat.id}"
+    name = message.from_user.full_name
 
     cur.execute(f"""
         CREATE TABLE if NOT EXISTS "{chat}" (
@@ -54,35 +55,43 @@ async def cock_command_handler(message: types.Message):
     record = {now.strftime("%Y-%m-%d %H:%M:%S"): size}
 
     if user:
-        if  midnight > user[3]:
-            size += round(float(user[1]), 1)
+
+        cur.execute(f"""
+            UPDATE "{chat}" SET name = '{name}'WHERE id = {user_id}
+        """) 
+
+        if  midnight > user[4]:
+            size += float(user[2])
 
             cur.execute(f"""
                 UPDATE "{chat}" SET
+                    name = '{name}',
                     size = {size},
-                    history = '{dumps(user[2] | record)}',
+                    history = '{dumps(user[3] | record)}',
                     last_use = '{now}'
                 WHERE id = {user_id}
             """) 
         else:
-            size = user[1]
+            size = user[2]
             message_text = "твоя спроба вже використана"
     else:
         cur.execute(f"""
-            INSERT INTO "{chat}" VALUES({user_id}, {size}, '{dumps(record)}')
+            INSERT INTO "{chat}"
+            VALUES({user_id}, '{name}', {size}, '{dumps(record)}')
         """)
 
     message_text = (
-            f"[{message.from_user.full_name}](tg://user?id={user_id}), "
-            f"{message_text}"
-            f"\nЗараз розмір твого півня *{size} см*"
-            "\nНаступна спроба завтра"
-        )
+        f"[{name}](tg://user?id={user_id}), {message_text}"
+        f"\nЗараз розмір твого півня *{round(float(size), 1)} см*"
+        "\nНаступна спроба завтра"
+    )
+
+    await message.reply(message_text)
 
 @dp.message_handler(
     commands=["top"], 
     chat_type = [types.ChatType.GROUP, types.ChatType.SUPERGROUP]
-        )
+)
 async def top_command_handler(message: types.Message):
     try:
         chat = f"chat{message.chat.id}"
