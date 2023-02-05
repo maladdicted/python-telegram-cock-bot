@@ -112,8 +112,7 @@ async def top_command_handler(message: types.Message):
         else:
             raise Exception
 
-    except Exception as e:
-        print(e)
+    except:
         message_text = "От халепа! Ніхто в чаті ще не грав"
 
     finally:
