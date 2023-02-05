@@ -79,10 +79,36 @@ async def cock_command_handler(message: types.Message):
             "\nНаступна спроба завтра"
         )
 
-    await message.reply(
-            message_text, 
-            parse_mode = types.message.ParseMode.MARKDOWN
+@dp.message_handler(
+    commands=["top"], 
+    chat_type = [types.ChatType.GROUP, types.ChatType.SUPERGROUP]
         )
+async def top_command_handler(message: types.Message):
+    try:
+        chat = f"chat{message.chat.id}"
+
+        cur.execute(f"""
+            SELECT name, size FROM "{chat}" ORDER BY size DESC LIMIT 10
+        """)
+
+        rows = cur.fetchall()
+
+        if rows:
+
+            message_text = "Топ 10 гравців чату:\n"
+
+            for i, row in enumerate(rows):
+                message_text += f"\n{i + 1}. {row[0]}: {row[1]} см"
+        
+        else:
+            raise Exception
+
+    except Exception as e:
+        print(e)
+        message_text = "От халепа! Ніхто в чаті ще не грав"
+
+    finally:
+        await message.reply(message_text)
 
 executor.start_polling(dp, skip_updates = True)
 conn.close()
