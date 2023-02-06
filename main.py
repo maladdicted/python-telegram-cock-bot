@@ -89,6 +89,45 @@ async def cock_command_handler(message: types.Message):
     await message.reply(message_text)
 
 @dp.message_handler(
+    commands=["me"], 
+    chat_type = [types.ChatType.GROUP, types.ChatType.SUPERGROUP]
+)
+async def me_command_handler(message: types.Message):
+    try:
+        user_id = message.from_user.id
+        chat_id = abs(message.chat.id)
+        name = message.from_user.full_name
+        message_text =  f"[{name}](tg://user?id={user_id}), "
+
+        cur.execute(f"""
+            SELECT size FROM "chat-{chat_id}" WHERE id = {user_id}
+        """)
+
+        user = cur.fetchone()
+
+        if user:
+        
+            cur.execute(f"""
+                UPDATE "chat-{chat_id}" SET name = '{name}'WHERE id = {user_id}
+            """) 
+        
+            message_text += (
+                "твоя статистика:\n"
+                f"\nID чату: `{chat_id}`"
+                f"\nID користувача: `{user_id}`"
+                f"\nРозмір півня: *{user[0]} см*"
+            )
+
+        else:
+            raise Exception
+
+    except:
+        message_text += "схоже, що ти ще жодного разу не грав в чаті"
+
+    finally:
+        await message.reply(message_text)
+
+@dp.message_handler(
     commands=["top"], 
     chat_type = [types.ChatType.GROUP, types.ChatType.SUPERGROUP]
 )
