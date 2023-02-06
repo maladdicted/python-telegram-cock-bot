@@ -100,7 +100,7 @@ async def me_command_handler(message: types.Message):
         message_text =  f"[{name}](tg://user?id={user_id}), "
 
         cur.execute(f"""
-            SELECT size FROM "chat-{chat_id}" WHERE id = {user_id}
+            SELECT size, last_use FROM "chat-{chat_id}" WHERE id = {user_id}
         """)
 
         user = cur.fetchone()
@@ -116,6 +116,7 @@ async def me_command_handler(message: types.Message):
                 f"\nID чату: `{chat_id}`"
                 f"\nID користувача: `{user_id}`"
                 f"\nРозмір півня: *{user[0]} см*"
+                f"""\nОстання спроба: *{user[1].strftime("%d.%m.%Y %H:%M")}*"""
             )
 
         else:
