@@ -4,5 +4,6 @@
 >   [version 1.0.0](https://github.com/maladdicted/python-telegram-cock-bot/releases/tag/v1.0.0)
 >  - [x] `/top` group in
 >   [version 2.0.0](https://github.com/maladdicted/python-telegram-cock-bot/releases/tag/v2.0.0)
->  - [ ] /me group command
+>  - [x] /me group command
+>   [version 3.0.0](https://github.com/maladdicted/python-telegram-cock-bot/releases/tag/v3.0.0)
 >  - [ ] graphs
