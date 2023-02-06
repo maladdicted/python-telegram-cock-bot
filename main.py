@@ -20,6 +20,18 @@ cur = conn.cursor()
 bot = Bot(token = environ.get("BOT_API_TOKEN"), parse_mode = "markdown")
 dp = Dispatcher(bot)
 
+@dp.message_handler(commands=["help"])
+async def cock_command_handler(message: types.Message):
+    message_text = (
+        "*Команди бота:*\n"
+        "\n/cock - Виростити півня"
+        "\n/me - Моя статистика"
+        "\n/top - Топ 10 гравців чату"
+        "\n/help - Список команд бота"
+    )
+
+    await message.reply(message_text) 
+
 @dp.message_handler(
     commands=["cock"], 
     chat_type = [types.ChatType.GROUP, types.ChatType.SUPERGROUP]
