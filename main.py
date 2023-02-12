@@ -54,7 +54,7 @@ async def cock_command_handler(message: types.Message):
     size = round(uniform(-5, 10), 1)
 
     if size < 0:
-        message_text = f"розмір твого півня зменшився на *{size} см*"
+        message_text = f"розмір твого півня зменшився на *{abs(size)} см*"
     elif size > 0:
         message_text = f"розмір твого півня збільшився на *{size} см*"
     else:
