@@ -85,7 +85,11 @@ async def cock_command_handler(message: types.Message):
             """) 
         else:
             size = user[2]
-            message_text = "твоя спроба вже використана"
+
+            message_text = (
+                "твоя спроба вже використана "
+                f"""({user[4].strftime("%H:%M")})"""
+            )
     else:
         cur.execute(f"""
             INSERT INTO "{chat}"
