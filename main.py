@@ -132,7 +132,7 @@ async def me_command_handler(message: types.Message):
                 f"\nID чату: `{chat_id}`"
                 f"\nID користувача: `{user_id}`"
                 f"\nРозмір півня: *{user[0]} см*"
-                f"""\nОстання спроба: *{user[1].strftime("%d.%m.%Y %H:%M")}*"""
+                f"""\n*Остання спроба:* `{user[1].strftime("%H:%M")}`"""
             )
 
         else:
