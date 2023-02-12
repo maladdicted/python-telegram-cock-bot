@@ -129,9 +129,9 @@ async def me_command_handler(message: types.Message):
         
             message_text += (
                 "твоя статистика:\n"
-                f"\nID чату: `{chat_id}`"
-                f"\nID користувача: `{user_id}`"
-                f"\nРозмір півня: *{user[0]} см*"
+                f"\n*ID чату:* `{chat_id}`"
+                f"\n*Твій ID:* `{user_id}`"
+                f"\n*Розмір півня:* `{user[0]} см`"
                 f"""\n*Остання спроба:* `{user[1].strftime("%H:%M")}`"""
             )
 
@@ -160,7 +160,7 @@ async def top_command_handler(message: types.Message):
 
         if rows:
 
-            message_text = "Топ 10 гравців чату:\n"
+            message_text = "*Топ 10 гравців чату:*\n"
 
             for i, row in enumerate(rows):
                 message_text += f"\n{i + 1}. {row[0]}: {row[1]} см"
